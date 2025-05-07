@@ -1,30 +1,52 @@
 using Unity.Netcode;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class NetworkUI : NetworkBehaviour
 {
     public TextMeshProUGUI allPlayersCartText;
+    public TextMeshProUGUI TimerText;
 
-    private float updateInterval = 0.5f; // UI update every 0.5 seconds
-    private float timer;
+    private float updateInterval = 0.1f; // UI update every 0.5 seconds
+    private float updatetimer;
+    private float gametimercounter = 0;
 
-    private void Update()
+    public float GameTimer = 60;
+
+private void Update()
+{
+    if (!IsServer) return;
+
+    updatetimer += Time.deltaTime;
+    gametimercounter += Time.deltaTime;
+
+    if (updatetimer >= updateInterval)
     {
-        if (!IsServer) return;
-
-        timer += Time.deltaTime;
-        if (timer >= updateInterval)
-        {
-            timer = 0f;
-            UpdatePlayerScores();
-        }
+        updatetimer = 0f;
+        UpdatePlayerScores();
     }
 
+    float remainingTime = GameTimer - gametimercounter;
+
+    if (remainingTime <= 0f)
+    {
+        TimerText.text = "0.00";
+        if (NetworkManager.Singleton.IsHost)
+        {
+            Debug.Log("Host is starting the game...");
+            NetworkManager.Singleton.SceneManager.LoadScene("ScoreScene", LoadSceneMode.Single);
+        }
+    }
+    else
+    {
+        TimerText.text = remainingTime.ToString("F2");
+    }
+}
     private void UpdatePlayerScores()
     {
         string allText = "";
-
+        if(NetworkManager.Singleton == null) return;
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
             var clientObject = client.PlayerObject;
