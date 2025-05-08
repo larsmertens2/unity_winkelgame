@@ -1533,6 +1533,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameSceneName: GameScene
   playerPrefab: {fileID: 2939876429037887490, guid: 1be98cb2ab193364693857269c00aa39, type: 3}
+  colors:
+  - {r: 0.13736251, g: 0.9169811, b: 0, a: 0}
+  - {r: 1, g: 0.62967366, b: 0, a: 0}
+  - {r: 1, g: 0, b: 0.8614092, a: 0}
+  - {r: 0, g: 0.013882071, b: 0.91764706, a: 0}
+  - {r: 0, g: 0.88340694, b: 0.91764706, a: 0}
+  - {r: 0.9018793, g: 1, b: 0.035848916, a: 0}
 --- !u!1 &1207405429
 GameObject:
   m_ObjectHideFlags: 0

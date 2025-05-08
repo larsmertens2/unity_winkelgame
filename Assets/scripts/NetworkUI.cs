@@ -6,47 +6,32 @@ using UnityEngine.SceneManagement;
 public class NetworkUI : NetworkBehaviour
 {
     public TextMeshProUGUI allPlayersCartText;
-    public TextMeshProUGUI TimerText;
+    public TextMeshProUGUI countdownText; // 🆕 Assign in the Inspector
 
-    private float updateInterval = 0.1f; // UI update every 0.5 seconds
+    private float updateInterval = 0.1f;
     private float updatetimer;
-    private float gametimercounter = 0;
 
-    public float GameTimer = 60;
+    private float countdownTime = 60f; // 🆕 Start at 60 seconds
 
-private void Update()
-{
-    if (!IsServer) return;
-
-    updatetimer += Time.deltaTime;
-    gametimercounter += Time.deltaTime;
-
-    if (updatetimer >= updateInterval)
+    private void Update()
     {
-        updatetimer = 0f;
-        UpdatePlayerScores();
-    }
+        if (!IsServer) return;
 
-    float remainingTime = GameTimer - gametimercounter;
+        updatetimer += Time.deltaTime;
 
-    if (remainingTime <= 0f)
-    {
-        TimerText.text = "0.00";
-        if (NetworkManager.Singleton.IsHost)
+        if (updatetimer >= updateInterval)
         {
-            Debug.Log("Host is starting the game...");
-            NetworkManager.Singleton.SceneManager.LoadScene("ScoreScene", LoadSceneMode.Single);
+            updatetimer = 0f;
+            UpdatePlayerScores();
+            UpdateCountdown(); // 🆕 Handle countdown
         }
     }
-    else
-    {
-        TimerText.text = remainingTime.ToString("F2");
-    }
-}
+
     private void UpdatePlayerScores()
     {
         string allText = "";
-        if(NetworkManager.Singleton == null) return;
+        if (NetworkManager.Singleton == null) return;
+
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
             var clientObject = client.PlayerObject;
@@ -77,12 +62,35 @@ private void Update()
         UpdateCartTotalClientRpc(allText);
     }
 
+    private void UpdateCountdown()
+    {
+        countdownTime -= updateInterval;
+        if (countdownTime < 0f)
+        {
+            countdownTime = 0f;
+            // Optionally: handle countdown end, like load a new scene or show message
+        }
+
+        string formattedTime = countdownTime.ToString("F1") + "s";
+        countdownText.text = formattedTime;
+        UpdateCountdownClientRpc(formattedTime);
+    }
+
     [ClientRpc]
     private void UpdateCartTotalClientRpc(string totalText)
     {
         if (!IsServer)
         {
             allPlayersCartText.text = totalText;
+        }
+    }
+
+    [ClientRpc]
+    private void UpdateCountdownClientRpc(string countdownFormatted)
+    {
+        if (!IsServer)
+        {
+            countdownText.text = countdownFormatted;
         }
     }
 }

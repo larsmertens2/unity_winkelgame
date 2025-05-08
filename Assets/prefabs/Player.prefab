@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2579069535
+  GlobalObjectIdHash: 4290326720
   InScenePlacedSourceGlobalObjectIdHash: 1297813168
   DeferredDespawnTick: 0
   Ownership: 1
@@ -777,6 +777,8 @@ MonoBehaviour:
     m_Bits: 64
   playercam: {fileID: 3341917351862738964}
   HoldingPoint: {fileID: 2582505929759498431}
+  totalScorePlayer:
+    m_InternalValue: 0
 --- !u!1 &4818021113537244994
 GameObject:
   m_ObjectHideFlags: 0
