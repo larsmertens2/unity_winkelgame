@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerAppearance : NetworkBehaviour
 {
-    public Renderer targetRenderer; // Assign via Inspector or GetComponentInChildren
+    public Renderer targetRenderer; 
     private NetworkVariable<Color> playerColor = new NetworkVariable<Color>(
         writePerm: NetworkVariableWritePermission.Server
     );
