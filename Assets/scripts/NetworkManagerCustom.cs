@@ -39,6 +39,15 @@ public class NetworkManagerCustom : MonoBehaviour
             SpawnPlayer(id);
     }
 
+    public static Color GetColorForClient(ulong clientId)
+    {
+        Color[] colorPalette = new Color[]
+        {
+            Color.red, Color.blue, Color.green, Color.yellow,
+            Color.cyan, Color.magenta, Color.gray, Color.white
+        };
+        return colorPalette[clientId % (ulong)colorPalette.Length];
+    }
     private void SpawnPlayer(ulong clientId)
     {
         var spawnPoint = SpawnPointManager.Instance?.GetRandomSpawnPoint();
@@ -50,5 +59,15 @@ public class NetworkManagerCustom : MonoBehaviour
 
         var go = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
         go.GetComponent<NetworkObject>()?.SpawnAsPlayerObject(clientId);
+
+        // Assign a unique color
+        var renderer = go.GetComponentInChildren<Renderer>();
+        if (renderer != null)
+        {
+            var uniqueColor = GetColorForClient(clientId);
+            var newMaterial = new Material(renderer.material); // Create a copy to avoid affecting others
+            newMaterial.color = uniqueColor;
+            renderer.material = newMaterial;
+        }
     }
 }

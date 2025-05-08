@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 public class NetworkUI : NetworkBehaviour
 {
     public TextMeshProUGUI allPlayersCartText;
-    public TextMeshProUGUI countdownText; // 🆕 Assign in the Inspector
+    public TextMeshProUGUI countdownText;
 
     private float updateInterval = 0.1f;
     private float updatetimer;
 
-    private float countdownTime = 60f; // 🆕 Start at 60 seconds
+    private float countdownTime = 60f; 
 
     private void Update()
     {
@@ -23,7 +23,7 @@ public class NetworkUI : NetworkBehaviour
         {
             updatetimer = 0f;
             UpdatePlayerScores();
-            UpdateCountdown(); // 🆕 Handle countdown
+            UpdateCountdown(); 
         }
     }
 
@@ -68,7 +68,11 @@ public class NetworkUI : NetworkBehaviour
         if (countdownTime < 0f)
         {
             countdownTime = 0f;
-            // Optionally: handle countdown end, like load a new scene or show message
+            if (NetworkManager.Singleton.IsHost)
+            {
+                Debug.Log("Host is starting the game...");
+                NetworkManager.Singleton.SceneManager.LoadScene("ScoreScene", LoadSceneMode.Single);
+            }
         }
 
         string formattedTime = countdownTime.ToString("F1") + "s";
