@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ using UnityEngine;
 public class ItemObject : NetworkBehaviour
 {
     private FollowTransform followTransform;
+    public NetworkVariable<bool> isStolen = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public float price = 10f;
 
@@ -21,5 +23,15 @@ public class ItemObject : NetworkBehaviour
     public Transform GetFollowTarget()
     {
         return followTransform.transform;
+    }
+
+    public NetworkVariable<bool> GetisStolen()
+    {
+        return isStolen;
+    }
+
+    public void SetisStolen(bool isStolen)
+    {
+        this.isStolen.Value =isStolen;
     }
 }

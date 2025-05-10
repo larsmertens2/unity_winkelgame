@@ -84,7 +84,7 @@ public class PlayerPickup : NetworkBehaviour
         if (itemRef.TryGet(out var itemObj))
         {
             var item = itemObj.GetComponent<ItemObject>();
-            if (item != null)
+            if (item != null && (!item.GetisStolen().Value))
             {
                 item.SetFollowTarget(HoldingPoint.transform);
                 heldItemRef.Value = item.NetworkObject;  // Update reference after successful pickup
@@ -116,6 +116,7 @@ public class PlayerPickup : NetworkBehaviour
             {
                 item.SetFollowTarget(transform);
                 heldItemRef.Value = item.NetworkObject;
+                item.SetisStolen(true);
             }
         }
     }
