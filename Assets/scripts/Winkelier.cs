@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 public class Winkelier : MonoBehaviour
 {
-    public List<Transform> GoPoints = new List<Transform>();
+    public List<Transform> GoPoints;
     public NavMeshAgent navMeshAgent;
 
     private float stuckTimer = 0f;
