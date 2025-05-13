@@ -8,6 +8,10 @@ public class PlayerController : NetworkBehaviour
     public Transform cameraTransform;
     public float mouseSensitivity = 2f;
 
+    // Voeg deze variabelen toe bovenaan de klasse
+    public float jumpForce = 5f;
+    private bool isGrounded;
+
     private Rigidbody rb;
     private float xRotation = 0f;
 
@@ -46,6 +50,23 @@ public class PlayerController : NetworkBehaviour
         Move();
     }
 
+    // Voeg deze methode toe om te controleren of de speler op de grond staat
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
+    }
+
     void Move()
     {
         // Getting inputs for movement
@@ -60,8 +81,14 @@ public class PlayerController : NetworkBehaviour
         Vector3 velocityChange = targetVelocity - rb.linearVelocity;
         velocityChange.y = 0;
 
-        // Applying force to the Rigidbody
+        // Applying force to the Rigidbody for movement
         rb.AddForce(velocityChange, ForceMode.VelocityChange);
+
+        // Handle jumping
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 
     void LookAround()

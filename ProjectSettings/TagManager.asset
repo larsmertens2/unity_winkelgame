@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - PickUp
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - NoPlayerCollision
   - Cart
   - Winkeliers
-  - 
+  - Ground
   - 
   - 
   - 
