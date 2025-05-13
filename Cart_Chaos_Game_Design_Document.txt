@@ -1,0 +1,133 @@
+
+# Game Design Document: "Cart Chaos" (Working Title)
+
+## 1. Game Overview
+| Aspect         | Detail |
+|----------------|--------|
+| **Genre**      | Competitive, first-person party game |
+| **Platform**   | PC |
+| **Engine**     | Unity |
+| **Multiplayer**| Unity Relay (room code based, 2–4 players) |
+| **Perspective**| First-person |
+| **Tone**       | Silly, chaotic, lighthearted |
+| **Session**    | 60 seconds per match |
+| **Victory**    | Most item value scored at end of timer |
+| **Map**        | Single supermarket map with static layout (more planned later) |
+
+## 2. Core Gameplay Loop
+1. Navigate the supermarket using first-person controls.
+2. Find items placed on store shelves (static locations).
+3. Pick up one item at a time.
+4. Bring items to your own movable shopping cart.
+5. Push your cart to the Checkout Zone.
+6. Score items in the cart by entering the zone.
+7. Repeat until time runs out.
+
+## 3. Player & Cart Mechanics
+### Player Actions
+- Pick up item (1 at a time)
+- Drop item manually
+- Push/pull own cart
+- Push other players' carts
+- Steal items from another player’s cart if not scored
+
+### Cart System
+- Each player has a physical, movable cart
+- Carts:
+  - Can be pushed freely
+  - Can be bumped by others
+  - Cannot be flipped, blocked, or destroyed
+- Carts do not auto-follow — players must push them manually
+- Items placed in carts remain until scored, stolen, or dropped
+
+## 4. Item System
+- Items:
+  - Placed on static shelves/racks
+  - Always spawn in same layout each round
+  - Have randomized value per round ($1–$50)
+  - May vary in size/appearance but have no weight mechanics
+
+## 5. Scoring System
+| Action | Result |
+|--------|--------|
+| Enter Checkout Zone with cart | Instantly scores all current cart items |
+| Scored items | Locked (can’t be stolen) |
+| Unscored items in cart | Vulnerable to theft |
+| Final score | Total $ value of items scored in time limit |
+
+- Optional tie-breaker: number of items scored, or first to score final item.
+
+## 6. Match Structure
+- Game Length: 60 seconds
+- Players: 2–4 (networked using Unity Relay)
+- Replayability:
+  - Static map encourages route mastery
+  - Randomized item prices keep rounds unpredictable
+
+## 7. Map Design
+**Setting:** A cluttered but structured supermarket  
+**Features:**
+- Static aisles and shelves
+- Pre-defined item spawn locations
+- Central Checkout Zone
+- Optional environmental elements (e.g., sliding doors)
+
+## 8. Game Feel & Tone
+- Silly, chaotic atmosphere (e.g. Overcooked/Fall Guys)
+- Physics-driven comedy: carts bumping, items falling
+- Bright, cartoony, low-poly supermarket aesthetic
+
+## 9. Multiplayer (Unity Relay)
+- Relay used for low-friction P2P multiplayer
+- Players join via room code
+- Host is authoritative
+- No matchmaking — lobby based
+- Round restarts handled by host
+
+## 10. Audio & Visuals
+- Visuals: Bright, colorful, low-poly
+- Audio:
+  - Upbeat music
+  - SFX for grabbing, dropping, scoring, bumping
+  - Optional announcer commentary
+
+## 11. Future Features
+- Power-ups (speed boost, sticky cart, price scanner)
+- Hazards (slippery floor, NPC shoppers)
+- Cosmetics (cart skins, player outfits)
+- Map variants (mall, electronics store)
+- Match customization (longer timer, rare high-value items)
+
+## 12. UI/UX Elements
+- Timer (top center)
+- Scoreboard (side or tab view)
+- Item value popup when held
+- Checkout feedback (sound + floating text)
+
+## 13. Technical Notes
+- Networking: Unity Relay (Relay + Lobby)
+- Carts: Rigidbody physics
+- Items: ScriptableObjects for price/value/visuals
+- Authority: Host simulation, no server persistence
+
+## 14. Layout Concept (Supermarket Map)
+**Layout Zones:**
+1. Entrance (spawn points for players)
+2. Aisles: 3–5 aisles, static layout
+3. Shelves: Hold items, fixed per aisle
+4. Central Checkout Zone: Wide area with scoring trigger
+5. Wall perimeter: Decorative or blocked
+
+**Sample Layout (Top-Down View):**
++--------------------------------+
+| [ Wall / Decorations ]         |
+|                                |
+|  Aisle 1   Aisle 2   Aisle 3   |
+|  [----]   [----]   [----]      |
+|  [----]   [----]   [----]      |
+|                                |
+|          Checkout Zone         |
+|        [ Scoring Area ]        |
+|                                |
+|     Player Spawn Area Here     |
++--------------------------------+
