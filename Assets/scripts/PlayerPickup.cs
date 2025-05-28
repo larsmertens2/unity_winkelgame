@@ -60,6 +60,13 @@ public class PlayerPickup : NetworkBehaviour
                 {
                     RequestPickupServerRpc(itemNetObj);  // Pass the actual NetworkObject
                     holdingItemObject = item;
+
+                    // If the item is a gun, call PickUpGun
+                    var gun = item.GetComponent<GunMechanics>();
+                    if (gun != null)
+                    {
+                        gun.PickUpGun();
+                    }
                 }
                 else
                 {
@@ -73,6 +80,13 @@ public class PlayerPickup : NetworkBehaviour
     {
         if (holdingItemObject != null)
         {
+            // If the item is a gun, call DropGun (optional, see below)
+            var gun = holdingItemObject.GetComponent<GunMechanics>();
+            if (gun != null)
+            {
+                gun.DropGun();
+            }
+
             DropItemServerRpc(holdingItemObject.NetworkObject);
             holdingItemObject = null;
         }
